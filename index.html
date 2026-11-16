@@ -76,7 +76,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
 .temas{display:flex;flex-direction:column;gap:clamp(48px,5vw,80px)}
 .tema{display:flex;flex-direction:column;gap:14px;max-width:56ch}
 .vortice{grid-column:8/-1;grid-row:1;position:sticky;top:12vh;height:76vh;align-self:start;display:flex;align-items:flex-end}
-.vortice figcaption{max-width:34ch}
 
 /* ---------- reglas: a mano ---------- */
 .reglas{padding-top:var(--gap)}
@@ -135,10 +134,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
 .pie a{text-decoration:none;position:relative;padding:4px 0}
 
 /* ---------- formación activa ---------- */
-.ahora{position:fixed;left:var(--m);bottom:18px;z-index:4;font-size:var(--small);display:flex;gap:8px;align-items:baseline;pointer-events:none;color:var(--muted);transition:opacity .4s,transform .5s var(--ease)}
-.ahora.oculto{opacity:0;transform:translateY(10px)}
-.ahora b{font-weight:600;color:var(--ink);display:inline-block;transition:opacity .3s,transform .4s var(--ease)}
-.ahora b.sale{opacity:0;transform:translateY(8px)}
 
 /* ---------- entradas ---------- */
 .js [data-rev]{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 75ms)}
@@ -166,7 +161,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
   .sitio img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--surface);order:-1}
   .preguntas .cab{position:static;margin-bottom:48px}
   .medidas{grid-template-columns:1fr 1fr 1fr}
-  .ahora{bottom:12px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -231,9 +225,7 @@ html.cerrado,html.cerrado body{overflow:hidden}
         </article>
       </div>
     </div>
-    <figure class="vortice" aria-hidden="true">
-      <figcaption class="nota">Molino. Cada ave sigue el rumbo de sus vecinas y la bandada gira alrededor de un centro vacío, que nadie ocupa.</figcaption>
-    </figure>
+    <div class="vortice" aria-hidden="true"></div>
   </section>
 
   <section class="reglas g" id="reglas" data-formacion="reglas" data-nombre="a mano" aria-labelledby="h-reg">
@@ -349,7 +341,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
   </div>
 </footer>
 
-<p class="ahora oculto" aria-hidden="true">Formación <b id="ahora">murmuración</b></p>
 
 <script>
 (() => {
@@ -418,31 +409,16 @@ const piedrasEl = [...document.querySelectorAll('[data-piedra]')];
 const vortice = document.querySelector('.vortice');
 const filas = [...document.querySelectorAll('.sitio')];
 const nombreEl = document.getElementById('titulo');
-const ahora = document.getElementById('ahora');
 const intro = document.querySelector('.intro');
 
-const ahoraP = document.querySelector('.ahora'), pie = document.querySelector('.pie');
 function elegirFormacion(){
   const y0 = H * .42, y1 = H * .58;
-  // el indicador no aparece en la entrada ni tapa la línea del pie
-  ahoraP.classList.toggle('oculto', intro.getBoundingClientRect().bottom > H * .35 ||pie.getBoundingClientRect().top < H - 8);
   for (const s of secciones){
     const r = s.getBoundingClientRect();
-    if (r.top < y1 && r.bottom > y0){
-      const f = s.dataset.formacion;
-      if (f !== activa){
-        activa = f;
-        ahora.classList.add('sale');
-        setTimeout(() => { ahora.textContent = s.dataset.nombre; ahora.classList.remove('sale'); }, 220);
-      }
-      return;
-    }
+    if (r.top < y1 && r.bottom > y0){ activa = s.dataset.formacion; return; }
   }
   // al fondo de la página el pie puede no alcanzar el centro
-  const ultima = secciones[secciones.length - 1];
-  if (scrollY + H >= document.documentElement.scrollHeight - 4 && activa !== ultima.dataset.formacion){
-    activa = ultima.dataset.formacion; ahora.textContent = ultima.dataset.nombre;
-  }
+  if (scrollY + H >= document.documentElement.scrollHeight - 4) activa = secciones[secciones.length - 1].dataset.formacion;
 }
 
 /* ---------- el nombre: puntos tomados de las letras ---------- */
