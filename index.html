@@ -200,7 +200,7 @@ html.cerrado,html.cerrado body{overflow:hidden}
       <p data-rev style="--i:1">Filosofía de la mente y de la lógica, y diez juegos para pensar con las manos. Miles de aves sin jefe ordenan esta página.</p>
       <div class="acciones" data-rev style="--i:2">
         <a class="boton" href="#sitios">Ver los diez sitios</a>
-        <span class="nota">Haz clic donde quieras para espantarlas.</span>
+        <span class="nota">Tu cursor es un halcón invisible. Haz clic para espantarlas.</span>
       </div>
     </div>
   </section>
@@ -319,7 +319,7 @@ html.cerrado,html.cerrado body{overflow:hidden}
       </div>
       <div class="p" data-piedra>
         <dt data-rev>¿Qué es el ave roja?</dt>
-        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu clic hace lo mismo.</dd>
+        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu cursor también es uno, aunque no se ve.</dd>
       </div>
       <div class="p" data-piedra>
         <dt data-rev>¿Y si pido menos movimiento?</dt>
@@ -480,6 +480,13 @@ function muestrearNombre(){
 
 /* ---------- halcones ---------- */
 const fantasma = { x: 0, y: 0, vx: 0, vy: 0, vida: 0, prox: 5000 };
+// el cursor es un halcón que no se dibuja: las aves huyen de él igual
+const cursor = { x: -999, y: -999, on: 0, t: 0 };
+addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  cursor.x = e.clientX; cursor.y = e.clientY; cursor.t = performance.now();
+}, { passive: true });
+document.addEventListener('pointerleave', () => { cursor.t = 0; });
 addEventListener('pointerdown', e => {
   if (e.target.closest('a,button,input,label,output,summary,form')) return;
   espantar(e.clientX, e.clientY);
@@ -622,6 +629,8 @@ function paso(dt){
   if (fantasma.vida > 0){ fantasma.x += fantasma.vx * dt; fantasma.y += fantasma.vy * dt; fantasma.vida -= dt * 16.67; }
   const halcones = [];
   if (fantasma.vida > 0) halcones.push(fantasma.x, fantasma.y, 120);
+  cursor.on += (((performance.now() - cursor.t) < 1600 ? 1 : 0) - cursor.on) * .1;
+  if (cursor.on > .2) halcones.push(cursor.x, cursor.y, 135);
 
   const porFila = Math.ceil(N / 10);
   let sumUx = 0, sumUy = 0, vecTot = 0;
@@ -736,7 +745,9 @@ function paso(dt){
       let sx = dx / d * v - vxi, sy = dy / d * v - vyi, m = Math.hypot(sx, sy);
       const lim = .1 + .9 * llegada;
       if (m > lim){ sx *= lim / m; sy *= lim / m; }
-      fx += sx * 1.4 * llegada; fy += sy * 1.4 * llegada;
+      // un ave asustada se olvida un rato de su letra
+      const calma = 1.4 * llegada / (1 + boost[i] * 2);
+      fx += sx * calma; fy += sy * calma;
       if (d < 4 && llegada > .6 && boost[i] < .2){ vx[i] *= .6; vy[i] *= .6; }
     }
 
@@ -756,7 +767,7 @@ function paso(dt){
     // halcones
     for (let q = 0; q < halcones.length; q += 3){
       const dx = x - halcones[q], dy = y - halcones[q + 1], d = Math.hypot(dx, dy), rh = halcones[q + 2];
-      if (d < rh && d > .01){ const k4 = 1.1 * (1 - d / rh); fx += dx / d * k4; fy += dy / d * k4; boost[i] = Math.max(boost[i], 2.4); }
+      if (d < rh && d > .01){ const k4 = 1.8 * (1 - d / rh); fx += dx / d * k4; fy += dy / d * k4; boost[i] = Math.max(boost[i], 2.4); }
     }
 
     let nvx = vxi + fx * dt, nvy = vyi + fy * dt;
