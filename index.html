@@ -95,16 +95,9 @@ html.cerrado,html.cerrado body{overflow:hidden}
 .vista img{width:100%;height:100%;object-fit:cover;transition:opacity .35s,transform 1.2s var(--ease)}
 .vista img.cambia{opacity:0;transform:scale(1.03)}
 
-/* ---------- preguntas: río ---------- */
-.preguntas{padding-top:var(--gap)}
-.preguntas .cab{grid-column:1/span 4;position:sticky;top:14vh;align-self:start;display:flex;flex-direction:column;gap:22px}
-.preguntas dl{grid-column:6/-1;display:flex;flex-direction:column;gap:clamp(44px,5vw,72px)}
-.p{display:flex;flex-direction:column;gap:12px;max-width:58ch}
-.p dt{font:600 var(--lead)/1.15 var(--f);font-variation-settings:'wdth' 104;letter-spacing:-.015em}
 
 /* ---------- cierre: el nombre ---------- */
 .cierre{padding-top:var(--gap);min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end}
-.cierre .cab{padding:0 var(--m);display:flex;flex-direction:column;gap:22px;max-width:calc(30ch + 2 * var(--m))}
 .pie{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;padding:clamp(28px,4vw,48px) var(--m) 28px;font-size:var(--small)}
 .pie nav{display:flex;flex-wrap:wrap;gap:12px 28px}
 .pie a{text-decoration:none;position:relative;padding:4px 0}
@@ -121,19 +114,16 @@ html.cerrado,html.cerrado body{overflow:hidden}
   .vortice{grid-column:8/-1}
   .sitios .cab,.lista{grid-column:1/span 7}
   .vista{grid-column:8/-1}
-  .preguntas .cab{grid-column:1/span 5}
-  .preguntas dl{grid-column:6/-1}
 }
 @media (max-width:700px){
   .barra nav a:not(.gh){display:none}
   .portada .bajada{justify-self:start}
   .intro h1{height:calc((100vw - 2 * var(--m)) * .4)}
-  .intereses .izq,.sitios .cab,.lista,.preguntas .cab,.preguntas dl{grid-column:1/-1}
+  .intereses .izq,.sitios .cab,.lista{grid-column:1/-1}
   .vortice{display:none}
   .vista{display:none}
   .sitio{grid-template-columns:1fr;gap:14px}
   .sitio img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--surface);order:-1}
-  .preguntas .cab{position:static;margin-bottom:48px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -158,7 +148,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
   <nav aria-label="Apartados" data-piedra>
     <a href="#intereses">Intereses</a>
     <a href="#sitios">Sitios</a>
-    <a href="#preguntas">Preguntas</a>
     <a class="gh" href="https://github.com/ontoterrorist">GitHub</a>
   </nav>
 </header>
@@ -222,47 +211,10 @@ html.cerrado,html.cerrado body{overflow:hidden}
     </figure>
   </section>
 
-  <section class="preguntas g" id="preguntas" data-formacion="rio" data-nombre="río" aria-labelledby="h-pre">
-    <div class="cab" data-piedra>
-      <h2 id="h-pre" data-rev>Preguntas</h2>
-      <p class="lead" data-rev style="--i:1">Aquí la bandada es un río, y cada respuesta es una piedra que lo desvía.</p>
-    </div>
-    <dl>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Qué es esta página?</dt>
-        <dd data-rev style="--i:1">La portada de ontoterrorist: filosofía de la mente, lógica y los sitios que voy haciendo. Las aves la recorren contigo y toman una forma distinta en cada apartado.</dd>
-      </div>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Quién dirige la bandada?</dt>
-        <dd data-rev style="--i:1">Nadie. Cada ave aplica las tres reglas a lo que ve cerca. Cada apartado suma una sola fuerza local más: las letras de un nombre, un centro para girar, un cable para posarse, una corriente. La forma de conjunto la pone la suma.</dd>
-      </div>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Por qué el río esquiva el texto?</dt>
-        <dd data-rev style="--i:1">Cada bloque de texto es una piedra: el ave que entra en él se desvía hacia el borde más cercano. Así la corriente se ve y las respuestas se leen.</dd>
-      </div>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Qué es el ave roja?</dt>
-        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu cursor también es uno, aunque no se ve.</dd>
-      </div>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Y si pido menos movimiento?</dt>
-        <dd data-rev style="--i:1">Si tu sistema pide movimiento reducido, la bandada queda quieta en la forma de cada apartado y la página se lee igual.</dd>
-      </div>
-      <div class="p" data-piedra>
-        <dt data-rev>¿Dónde está el código?</dt>
-        <dd data-rev style="--i:1">En <a href="https://github.com/ontoterrorist">github.com/ontoterrorist</a>. Esta página es un solo archivo HTML: un canvas para las aves y una tipografía, Archivo. Hasta el título lo escriben las aves.</dd>
-      </div>
-    </dl>
-  </section>
 </main>
 
-<footer class="cierre" data-formacion="libre" data-nombre="murmuración" aria-labelledby="h-fin">
-  <div class="cab">
-    <h2 id="h-fin" data-rev>Se dispersan</h2>
-    <p class="lead" data-rev style="--i:1">Sin nombre que escribir ni cable donde posarse, quedan solo las tres reglas. Esto es una murmuración.</p>
-  </div>
+<footer class="cierre" data-formacion="libre" data-nombre="murmuración">
   <div class="pie">
-    <span>ontoterrorist, filosofía de la mente. © 2026</span>
     <nav aria-label="Pie">
       <a href="https://github.com/ontoterrorist">GitHub</a>
       <a href="https://ontoterrorist.github.io/ontoterrorista/">La otra portada, con tren</a>
