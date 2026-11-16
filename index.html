@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ontoterrorist</title>
+<meta name="description" content="ontoterrorist: filosofía de la mente, lógica y diez juegos para pensar con las manos. Una bandada sin jefe recorre la página y cambia de forma en cada apartado.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* noche sin luna: tierra negra, aves de hueso, un halcón rojo */
+  --bg:#000; --surface:#0e0e0d; --surface-2:#262623;
+  --ink:#ecebe6; --muted:#a6a49e;
+  --accent:#ff3d2e; --accent-ink:#000;
+  --f:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:clamp(2.25rem,1.3rem + 3.3vw,4.5rem);
+  --lead:clamp(1.375rem,1.1rem + .9vw,2rem);
+  --body:clamp(1.0625rem,1rem + .25vw,1.1875rem);
+  --small:.9375rem;
+  --m:clamp(16px,2.5vw,36px);
+  --gap:clamp(120px,14vw,220px);
+  --col:clamp(16px,2vw,28px);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--body)/1.55 var(--f);font-variation-settings:'wdth' 100;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p,dl,dd,figure,ul{margin:0;padding:0}
+ul{list-style:none}
+a{color:inherit}
+img{display:block;max-width:100%}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+[tabindex="-1"]:focus{outline:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#cielo{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+main,header,footer{position:relative;z-index:1}
+
+.g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col);padding:0 var(--m)}
+h2{font:760 var(--head)/.98 var(--f);font-variation-settings:'wdth' 112;letter-spacing:-.035em}
+h3{font:560 var(--lead)/1.12 var(--f);font-variation-settings:'wdth' 104;letter-spacing:-.018em}
+.lead{font:400 var(--lead)/1.3 var(--f);letter-spacing:-.012em;max-width:30ch}
+.nota{font-size:var(--small);color:var(--muted);line-height:1.45}
+
+/* ---------- barra ---------- */
+.barra{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:22px var(--m);z-index:3}
+.marca{font:700 1.0625rem/1 var(--f);font-variation-settings:'wdth' 118;letter-spacing:-.01em;text-decoration:none}
+.barra nav{display:flex;gap:clamp(16px,2.2vw,34px)}
+.barra nav a{font-size:var(--small);text-decoration:none;padding:6px 0;position:relative}
+.barra nav a::after,.pie a::after{content:'';position:absolute;left:0;right:0;bottom:1px;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.barra nav a:hover::after,.pie a:hover::after{transform:scaleX(1)}
+
+/* ---------- portada: murmuración ---------- */
+/* ---------- entrada: solo el nombre, hecho de aves ---------- */
+.intro{height:100svh;min-height:420px;display:flex;align-items:center;padding:0 var(--m);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.intro h1{width:100%;height:calc((100vw - 2 * var(--m)) * .13);font-size:1rem}
+html.cerrado,html.cerrado body{overflow:hidden}
+
+.portada{height:100svh;min-height:480px;display:grid;grid-template-rows:1fr;position:relative}
+.portada .bajada{grid-row:1;align-self:center;justify-self:end;width:min(38ch,calc(100% - 2 * var(--m)));margin-right:var(--m);margin-left:var(--m);display:flex;flex-direction:column;gap:28px;transform:translateY(-4vh)}
+.portada .bajada p{font-size:var(--lead);line-height:1.28;letter-spacing:-.012em}
+.acciones{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px}
+.boton{display:inline-block;font:600 var(--body)/1 var(--f);font-variation-settings:'wdth' 108;color:var(--accent-ink);background:var(--accent);padding:18px 26px 17px;text-decoration:none;border:0;border-radius:0;cursor:pointer;transition:transform .25s var(--ease),background-color .25s}
+.boton:hover{background:#ff6a5c;transform:translateY(-2px)}
+.boton:active{transform:translateY(1px)}
+
+/* ---------- intereses: molino ---------- */
+.intereses{padding-top:var(--gap)}
+.intereses .izq{grid-column:1/span 6;display:flex;flex-direction:column;gap:clamp(64px,7vw,110px)}
+.intereses .cab{display:flex;flex-direction:column;gap:28px}
+.temas{display:flex;flex-direction:column;gap:clamp(48px,5vw,80px)}
+.tema{display:flex;flex-direction:column;gap:14px;max-width:56ch}
+.vortice{grid-column:8/-1;grid-row:1;position:sticky;top:12vh;height:76vh;align-self:start;display:flex;align-items:flex-end}
+.vortice figcaption{max-width:34ch}
+
+/* ---------- reglas: a mano ---------- */
+.reglas{padding-top:var(--gap)}
+.reglas .texto{grid-column:1/span 5;display:flex;flex-direction:column;gap:26px;align-self:start}
+.reglas .texto p{max-width:46ch}
+.mando{grid-column:7/-1;background:var(--surface);padding:clamp(24px,3vw,44px);display:flex;flex-direction:column;gap:30px}
+.regla{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline}
+.regla label{font:600 var(--lead)/1.1 var(--f);font-variation-settings:'wdth' 106;letter-spacing:-.015em}
+.regla output{font:500 var(--lead)/1 var(--f);font-variant-numeric:tabular-nums;color:var(--accent)}
+.regla p{grid-column:1/-1;font-size:var(--small);color:var(--muted);line-height:1.45;max-width:52ch}
+.regla input{grid-column:1/-1;width:100%;margin:8px 0 0;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:pointer}
+.regla input::-webkit-slider-runnable-track{height:6px;background:var(--surface-2)}
+.regla input::-moz-range-track{height:6px;background:var(--surface-2)}
+.regla input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;background:var(--ink);border-radius:50%;transition:transform .2s var(--ease)}
+.regla input::-moz-range-thumb{width:22px;height:22px;border:0;background:var(--ink);border-radius:50%}
+.regla input:hover::-webkit-slider-thumb{transform:scale(1.15)}
+.regla input:focus-visible{outline-offset:2px}
+.presets{display:flex;flex-wrap:wrap;gap:10px}
+.presets button{font:500 var(--small)/1 var(--f);color:var(--ink);background:var(--surface-2);border:0;padding:13px 16px;cursor:pointer;border-radius:0;transition:background-color .2s,color .2s,transform .2s var(--ease)}
+.presets button:hover{background:#34342f;transform:translateY(-1px)}
+.presets button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.medidas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding-top:6px}
+.medidas div{display:flex;flex-direction:column;gap:4px}
+.medidas b{font:700 clamp(1.75rem,1.2rem + 1.6vw,2.75rem)/1 var(--f);font-variation-settings:'wdth' 112;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.medidas span{font-size:var(--small);color:var(--muted);line-height:1.35}
+
+/* ---------- sitios: en el cable ---------- */
+.sitios{padding-top:var(--gap)}
+.sitios .cab{grid-column:1/span 7;display:flex;flex-direction:column;gap:22px;margin-bottom:clamp(40px,5vw,72px)}
+.lista{grid-column:1/span 7;grid-row:2}
+.sitio{display:grid;grid-template-columns:1fr auto;align-items:end;gap:4px 24px;padding:20px 0 26px}
+.sitio .abrir{display:flex;flex-direction:column;gap:4px;text-decoration:none;min-width:0}
+.sitio .nom{font:680 clamp(1.75rem,1.2rem + 1.9vw,3rem)/1 var(--f);font-variation-settings:'wdth' 108;letter-spacing:-.03em;transition:transform .4s var(--ease),color .2s}
+.sitio .que{font-size:var(--body);line-height:1.4;max-width:52ch}
+.sitio .cod{font-size:var(--small);color:var(--muted);text-decoration:none;padding:6px 0}
+.sitio .cod:hover{color:var(--ink)}
+.sitio .abrir:hover .nom,.sitio .abrir:focus-visible .nom,.sitio.on .nom{transform:translateX(10px);color:var(--accent)}
+.sitio img{display:none}
+.vista{grid-column:9/-1;grid-row:1/span 2;position:sticky;top:14vh;align-self:start;display:flex;flex-direction:column;gap:14px}
+.vista .marco{aspect-ratio:3/2;background:var(--surface);overflow:hidden}
+.vista img{width:100%;height:100%;object-fit:cover;transition:opacity .35s,transform 1.2s var(--ease)}
+.vista img.cambia{opacity:0;transform:scale(1.03)}
+
+/* ---------- preguntas: río ---------- */
+.preguntas{padding-top:var(--gap)}
+.preguntas .cab{grid-column:1/span 4;position:sticky;top:14vh;align-self:start;display:flex;flex-direction:column;gap:22px}
+.preguntas dl{grid-column:6/-1;display:flex;flex-direction:column;gap:clamp(44px,5vw,72px)}
+.p{display:flex;flex-direction:column;gap:12px;max-width:58ch}
+.p dt{font:600 var(--lead)/1.15 var(--f);font-variation-settings:'wdth' 104;letter-spacing:-.015em}
+
+/* ---------- cierre: el nombre ---------- */
+.cierre{padding-top:var(--gap);min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end}
+.cierre .cab{padding:0 var(--m);display:flex;flex-direction:column;gap:22px;max-width:calc(30ch + 2 * var(--m))}
+.pie{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;padding:clamp(28px,4vw,48px) var(--m) 28px;font-size:var(--small)}
+.pie nav{display:flex;flex-wrap:wrap;gap:12px 28px}
+.pie a{text-decoration:none;position:relative;padding:4px 0}
+
+/* ---------- formación activa ---------- */
+.ahora{position:fixed;left:var(--m);bottom:18px;z-index:4;font-size:var(--small);display:flex;gap:8px;align-items:baseline;pointer-events:none;color:var(--muted);transition:opacity .4s,transform .5s var(--ease)}
+.ahora.oculto{opacity:0;transform:translateY(10px)}
+.ahora b{font-weight:600;color:var(--ink);display:inline-block;transition:opacity .3s,transform .4s var(--ease)}
+.ahora b.sale{opacity:0;transform:translateY(8px)}
+
+/* ---------- entradas ---------- */
+.js [data-rev]{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 75ms)}
+.js [data-rev].in{opacity:1;transform:none}
+
+/* ---------- tablet y teléfono ---------- */
+@media (max-width:1000px){
+  .intereses .izq{grid-column:1/span 7}
+  .vortice{grid-column:8/-1}
+  .reglas .texto{grid-column:1/-1;margin-bottom:48px}
+  .mando{grid-column:1/-1}
+  .sitios .cab,.lista{grid-column:1/span 7}
+  .vista{grid-column:8/-1}
+  .preguntas .cab{grid-column:1/span 5}
+  .preguntas dl{grid-column:6/-1}
+}
+@media (max-width:700px){
+  .barra nav a:not(.gh){display:none}
+  .portada .bajada{justify-self:start;transform:none}
+  .intro h1{height:calc((100vw - 2 * var(--m)) * .4)}
+  .intereses .izq,.sitios .cab,.lista,.preguntas .cab,.preguntas dl{grid-column:1/-1}
+  .vortice{display:none}
+  .vista{display:none}
+  .sitio{grid-template-columns:1fr;gap:14px}
+  .sitio img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--surface);order:-1}
+  .preguntas .cab{position:static;margin-bottom:48px}
+  .medidas{grid-template-columns:1fr 1fr 1fr}
+  .ahora{bottom:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js [data-rev]{opacity:1;transform:none;transition:none}
+  .boton,.sitio .nom,.vista img{transition:none}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<canvas id="cielo" aria-hidden="true"></canvas>
+
+<main id="arriba">
+  <section class="intro" data-formacion="nombre" data-nombre="nombre" aria-labelledby="titulo">
+    <h1 id="titulo"><span class="sr">ontoterrorist</span></h1>
+    <button class="sr" type="button" id="entrar">Entrar a la página</button>
+  </section>
+
+  <section class="portada" id="presentacion" data-formacion="libre" data-nombre="murmuración" aria-labelledby="h-pres">
+<header class="barra" data-piedra>
+  <a class="marca" href="#arriba">ontoterrorist</a>
+  <nav aria-label="Apartados">
+    <a href="#intereses">Intereses</a>
+    <a href="#reglas">Las reglas</a>
+    <a href="#sitios">Sitios</a>
+    <a href="#preguntas">Preguntas</a>
+    <a class="gh" href="https://github.com/ontoterrorist">GitHub</a>
+  </nav>
+</header>
+    <div class="bajada" data-piedra>
+      <h2 id="h-pres" tabindex="-1" data-rev>Mente, lógica y diez juegos</h2>
+      <p data-rev style="--i:1">Filosofía de la mente y de la lógica, y diez juegos para pensar con las manos. Mil aves sin jefe ordenan esta página.</p>
+      <div class="acciones" data-rev style="--i:2">
+        <a class="boton" href="#sitios">Ver los diez sitios</a>
+        <span class="nota">Tu cursor es un halcón. Haz clic para espantarlas.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="intereses g" id="intereses" data-formacion="molino" data-nombre="molino" aria-labelledby="h-int">
+    <div class="izq">
+      <div class="cab" data-piedra>
+        <h2 id="h-int" data-rev>Qué me interesa</h2>
+        <p class="lead" data-rev style="--i:1">La mente como algo que se explica con mecanismos, se vive en primera persona y se extiende hacia las cosas que usamos.</p>
+      </div>
+      <div class="temas">
+        <article class="tema" data-piedra>
+          <h3 data-rev>Filosofía de la ciencia cognitiva</h3>
+          <p data-rev style="--i:1">Qué hace una ciencia de la mente cuando explica: qué cuenta como un buen modelo, cómo se relacionan la psicología, la neurociencia y la computación, y hasta qué punto una teoría sobre cómo se procesa la información dice algo de lo que es pensar.</p>
+        </article>
+        <article class="tema" data-piedra>
+          <h3 data-rev>Explicación mecanicista</h3>
+          <p data-rev style="--i:1">Explicar un fenómeno es mostrar el mecanismo que lo produce: sus partes, lo que hacen y cómo están organizadas. En la mente eso lleva a buscar qué componentes del cerebro y del cuerpo hacen posibles la memoria o la atención, y a discutir cuándo descomponer en partes deja de aclarar algo.</p>
+        </article>
+        <article class="tema" data-piedra>
+          <h3 data-rev>Fenomenología</h3>
+          <p data-rev style="--i:1">Parte de cómo se vive la experiencia en primera persona: la percepción, el cuerpo propio, el tiempo vivido. Pone a prueba a las explicaciones científicas con una pregunta incómoda, qué se deja fuera cuando se describe la mente solo desde afuera.</p>
+        </article>
+        <article class="tema" data-piedra>
+          <h3 data-rev>Mente extendida</h3>
+          <p data-rev style="--i:1">Los procesos cognitivos no terminan en el cráneo: un cuaderno, una herramienta o un mapa pueden formar parte de la forma en que se piensa. Lo que se discute es dónde poner el límite de lo mental, y qué criterio permite decir que algo cuenta como parte de la mente.</p>
+        </article>
+      </div>
+    </div>
+    <figure class="vortice" aria-hidden="true">
+      <figcaption class="nota">Molino. Cada ave sigue el rumbo de sus vecinas y la bandada gira alrededor de un centro vacío, que nadie ocupa.</figcaption>
+    </figure>
+  </section>
+
+  <section class="reglas g" id="reglas" data-formacion="reglas" data-nombre="a mano" aria-labelledby="h-reg">
+    <div class="texto" data-piedra>
+      <h2 id="h-reg" data-rev>Tres reglas, ningún jefe</h2>
+      <p class="lead" data-rev style="--i:1">Cada ave ve solo a sus vecinas, dentro de un radio, y corrige su rumbo con tres reglas. Ninguna ve la bandada entera.</p>
+      <p data-rev style="--i:2">Craig Reynolds las publicó en 1987 con el nombre de boids. Son mi ejemplo favorito de explicación mecanicista: unas partes, lo que hace cada una y cómo se organizan, y de ahí sale una forma que ninguna parte contiene. Mueve las reglas y mira qué bandada sale.</p>
+    </div>
+    <form class="mando" data-piedra aria-label="Reglas de la bandada" onsubmit="return false">
+      <div class="regla" data-rev>
+        <label for="r-sep">Separación</label><output id="o-sep" for="r-sep">1,70</output>
+        <p>No chocar: cada ave se aleja de las que tiene demasiado cerca.</p>
+        <input id="r-sep" type="range" min="0" max="3" step="0.05" value="1.7">
+      </div>
+      <div class="regla" data-rev style="--i:1">
+        <label for="r-ali">Alineación</label><output id="o-ali" for="r-ali">1,00</output>
+        <p>Ir hacia donde van: copia el rumbo medio de sus vecinas.</p>
+        <input id="r-ali" type="range" min="0" max="3" step="0.05" value="1">
+      </div>
+      <div class="regla" data-rev style="--i:2">
+        <label for="r-coh">Cohesión</label><output id="o-coh" for="r-coh">0,85</output>
+        <p>No quedarse sola: se acerca al centro de sus vecinas.</p>
+        <input id="r-coh" type="range" min="0" max="3" step="0.05" value="0.85">
+      </div>
+      <div class="regla" data-rev style="--i:3">
+        <label for="r-rad">Radio de visión</label><output id="o-rad" for="r-rad">36 px</output>
+        <p>Hasta dónde mira cada ave. Más allá, las demás no existen para ella.</p>
+        <input id="r-rad" type="range" min="10" max="80" step="1" value="36">
+      </div>
+      <div class="presets" role="group" aria-label="Bandadas de ejemplo" data-rev style="--i:4">
+        <button type="button" data-p="1.7,1,0.85,36" aria-pressed="true">Murmuración</button>
+        <button type="button" data-p="1.2,0,1.6,42" aria-pressed="false">Enjambre</button>
+        <button type="button" data-p="1.4,2.6,0.5,40" aria-pressed="false">Cardumen</button>
+        <button type="button" data-p="2.8,0.15,0,30" aria-pressed="false">Dispersión</button>
+      </div>
+      <div class="medidas" aria-live="off" data-rev style="--i:5">
+        <div><b id="m-orden">0,00</b><span>orden: 1 si todas van hacia el mismo lado</span></div>
+        <div><b id="m-vec">0,0</b><span>vecinas que ve cada ave, en promedio</span></div>
+        <div><b id="m-aves">0</b><span>aves, ninguna al mando</span></div>
+      </div>
+    </form>
+  </section>
+
+  <section class="sitios g" id="sitios" data-formacion="cable" data-nombre="en el cable" aria-labelledby="h-sit">
+    <div class="cab">
+      <h2 id="h-sit" data-rev>Diez sitios</h2>
+      <p class="lead" data-rev style="--i:1">Juegos y herramientas con página propia. Las aves se posan en cada uno; pasa por encima y levantan vuelo.</p>
+    </div>
+    <ul class="lista">
+      <li class="sitio" data-img="sitios/logic-advance.jpg"><img src="sitios/logic-advance.jpg" alt="Pantalla de inicio de Logic Advance" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/logic-advance/"><span class="nom">Logic Advance</span><span class="que">Deducción natural estilo Fitch con aspecto de consola portátil, en inglés.</span></a><a class="cod" href="https://github.com/ontoterrorist/logic-advance">Código</a></li>
+      <li class="sitio" data-img="sitios/logica-advance.jpg"><img src="sitios/logica-advance.jpg" alt="Pantalla de inicio de Lógica Advance" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/logica-advance/"><span class="nom">Lógica Advance</span><span class="que">Deducción natural, de la lógica clásica a Gödel. Se instala como app.</span></a><a class="cod" href="https://github.com/ontoterrorist/logica-advance">Código</a></li>
+      <li class="sitio" data-img="sitios/logica-axiomatica.jpg"><img src="sitios/logica-axiomatica.jpg" alt="Pantalla de inicio de Lógica Axiomática" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/logica-axiomatica/"><span class="nom">Lógica Axiomática</span><span class="que">Los mismos mundos con el cálculo de Hilbert: axiomas y modus ponens.</span></a><a class="cod" href="https://github.com/ontoterrorist/logica-axiomatica">Código</a></li>
+      <li class="sitio" data-img="sitios/logica.jpg"><img src="sitios/logica.jpg" alt="Pantalla de inicio de Lógica por Árboles" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/logica/"><span class="nom">Lógica por Árboles</span><span class="que">Tableaux de lógicas no clásicas, siguiendo a Priest, con Ramón el pulpo.</span></a><a class="cod" href="https://github.com/ontoterrorist/logica">Código</a></li>
+      <li class="sitio" data-img="sitios/logic-tableaux.jpg"><img src="sitios/logic-tableaux.jpg" alt="Pantalla de inicio de Logic Tableaux" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/logic-tableaux/"><span class="nom">Logic Tableaux</span><span class="que">Árboles de verdad de la lógica clásica.</span></a><a class="cod" href="https://github.com/ontoterrorist/logic-tableaux">Código</a></li>
+      <li class="sitio" data-img="sitios/falacia-advance.jpg"><img src="sitios/falacia-advance.jpg" alt="Pantalla de inicio de Falacia Advance" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/falacia-advance/"><span class="nom">Falacia Advance</span><span class="que">Un juego para aprender a detectar falacias.</span></a><a class="cod" href="https://github.com/ontoterrorist/falacia-advance">Código</a></li>
+      <li class="sitio" data-img="sitios/metafisica-advance.jpg"><img src="sitios/metafisica-advance.jpg" alt="Pantalla de inicio de Metafísica Advance" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/metafisica-advance/"><span class="nom">Metafísica Advance</span><span class="que">Rol de consola portátil: pueblos, teorías y disputas que se ganan dando y pidiendo razones.</span></a><a class="cod" href="https://github.com/ontoterrorist/metafisica-advance">Código</a></li>
+      <li class="sitio" data-img="sitios/lingua-latina.jpg"><img src="sitios/lingua-latina.jpg" alt="Pantalla de inicio de Lingua Latina" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/lingua-latina/"><span class="nom">Lingua Latina</span><span class="que">Latín paso a paso, con voz y cartas de repaso.</span></a><a class="cod" href="https://github.com/ontoterrorist/lingua-latina">Código</a></li>
+      <li class="sitio" data-img="sitios/ruso.jpg"><img src="sitios/ruso.jpg" alt="Pantalla de inicio de Aprende ruso" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/ruso/"><span class="nom">Aprende ruso</span><span class="que">Charlas con Masha, gramática y repaso espaciado.</span></a><a class="cod" href="https://github.com/ontoterrorist/ruso">Código</a></li>
+      <li class="sitio" data-img="sitios/entrenador-pgn.jpg"><img src="sitios/entrenador-pgn.jpg" alt="Pantalla de inicio del Entrenador PGN" loading="lazy" width="600" height="400"><a class="abrir" href="https://ontoterrorist.github.io/entrenador-pgn/"><span class="nom">Entrenador PGN</span><span class="que">Repertorio de ajedrez con repetición espaciada: cargas un PGN y repasas tus líneas.</span></a><a class="cod" href="https://github.com/ontoterrorist/entrenador-pgn">Código</a></li>
+    </ul>
+    <figure class="vista">
+      <div class="marco"><img id="vista-img" src="sitios/logic-advance.jpg" alt="Pantalla de inicio de Logic Advance" width="600" height="400"></div>
+      <figcaption class="nota" id="vista-pie">Logic Advance, pantalla de inicio.</figcaption>
+    </figure>
+  </section>
+
+  <section class="preguntas g" id="preguntas" data-formacion="rio" data-nombre="río" aria-labelledby="h-pre">
+    <div class="cab" data-piedra>
+      <h2 id="h-pre" data-rev>Preguntas</h2>
+      <p class="lead" data-rev style="--i:1">Aquí la bandada es un río, y cada respuesta es una piedra que lo desvía.</p>
+    </div>
+    <dl>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Qué es esta página?</dt>
+        <dd data-rev style="--i:1">La portada de ontoterrorist: filosofía de la mente, lógica y los sitios que voy haciendo. Las aves la recorren contigo y toman una forma distinta en cada apartado.</dd>
+      </div>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Quién dirige la bandada?</dt>
+        <dd data-rev style="--i:1">Nadie. Cada ave aplica las tres reglas a lo que ve cerca. Cada apartado suma una sola fuerza local más: las letras de un nombre, un centro para girar, un cable para posarse, una corriente. La forma de conjunto la pone la suma.</dd>
+      </div>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Por qué el río esquiva el texto?</dt>
+        <dd data-rev style="--i:1">Cada bloque de texto es una piedra: el ave que entra en él se desvía hacia el borde más cercano. Así la corriente se ve y las respuestas se leen.</dd>
+      </div>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Qué es el ave roja?</dt>
+        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu cursor también es uno.</dd>
+      </div>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Y si pido menos movimiento?</dt>
+        <dd data-rev style="--i:1">Si tu sistema pide movimiento reducido, la bandada queda quieta en la forma de cada apartado y la página se lee igual.</dd>
+      </div>
+      <div class="p" data-piedra>
+        <dt data-rev>¿Dónde está el código?</dt>
+        <dd data-rev style="--i:1">En <a href="https://github.com/ontoterrorist">github.com/ontoterrorist</a>. Esta página es un solo archivo HTML: un canvas para las aves y una tipografía, Archivo. Hasta el título lo escriben las aves.</dd>
+      </div>
+    </dl>
+  </section>
+</main>
+
+<footer class="cierre" data-formacion="libre" data-nombre="murmuración" aria-labelledby="h-fin">
+  <div class="cab">
+    <h2 id="h-fin" data-rev>Se dispersan</h2>
+    <p class="lead" data-rev style="--i:1">Sin nombre que escribir ni cable donde posarse, quedan solo las tres reglas. Esto es una murmuración.</p>
+  </div>
+  <div class="pie">
+    <span>ontoterrorist, filosofía de la mente. © 2026</span>
+    <nav aria-label="Pie">
+      <a href="https://github.com/ontoterrorist">GitHub</a>
+      <a href="https://ontoterrorist.github.io/ontoterrorista/">La otra portada, con tren</a>
+      <a href="#arriba">Volver arriba</a>
+    </nav>
+  </div>
+</footer>
+
+<p class="ahora oculto" aria-hidden="true">Formación <b id="ahora">murmuración</b></p>
+
+<script>
+(() => {
+'use strict';
+const cv = document.getElementById('cielo');
+const ctx = cv.getContext('2d');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const phone = () => innerWidth <= 700;
+
+let W = 0, H = 0, DPR = 1;
+const area = innerWidth * innerHeight;
+const N = phone() ? 700 : area > 1.5e6 ? 1500 : 1150;
+
+const px = new Float32Array(N), py = new Float32Array(N);
+const vx = new Float32Array(N), vy = new Float32Array(N);
+const hd = new Float32Array(N), sz = new Float32Array(N);
+const ph = new Float32Array(N), lane = new Float32Array(N);
+const boost = new Float32Array(N);
+const nxt = new Int32Array(N);
+
+function resize(){
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+}
+resize();
+
+for (let i = 0; i < N; i++){
+  px[i] = W * (.15 + Math.random() * .7);
+  py[i] = H * (.1 + Math.random() * .5);
+  const a = Math.random() * Math.PI * 2;
+  vx[i] = Math.cos(a) * 2; vy[i] = Math.sin(a) * 2; hd[i] = a;
+  sz[i] = .62 + Math.pow(Math.random(), 1.6) * .8;
+  ph[i] = Math.random() * 6.283;
+  lane[i] = Math.random() * 2 - 1;
+}
+
+/* ---------- formaciones: cada una es un juego de pesos y una fuerza local ---------- */
+const sliders = { sep: 1.7, ali: 1, coh: .85, r: 36, vmax: 3.2, vmin: 1.4 };
+const SETS = {
+  libre:  { sep: 1.7, ali: 1.0, coh: .85, r: 36, vmax: 3.3, vmin: 1.6 },
+  molino: { sep: 1.6, ali: 1.5, coh: .4,  r: 30, vmax: 2.9, vmin: 1.6 },
+  reglas: sliders,
+  cable:  { sep: .2,  ali: .15, coh: 0,   r: 22, vmax: 4.4, vmin: 0 },
+  rio:    { sep: 1.5, ali: 2.1, coh: .45, r: 34, vmax: 3.6, vmin: 2.2 },
+  nombre: { sep: .15, ali: .1,  coh: 0,   r: 18, vmax: 5,   vmin: 0 },
+};
+const KEYS = Object.keys(SETS);
+const F = { libre: 1, molino: 0, reglas: 0, cable: 0, rio: 0, nombre: 0 };
+const P = Object.assign({}, SETS.libre);
+let activa = 'libre';
+
+const secciones = [...document.querySelectorAll('[data-formacion]')];
+const piedrasEl = [...document.querySelectorAll('[data-piedra]')];
+const vortice = document.querySelector('.vortice');
+const filas = [...document.querySelectorAll('.sitio')];
+const nombreEl = document.getElementById('titulo');
+const ahora = document.getElementById('ahora');
+const intro = document.querySelector('.intro');
+
+const ahoraP = document.querySelector('.ahora'), pie = document.querySelector('.pie');
+function elegirFormacion(){
+  const y0 = H * .42, y1 = H * .58;
+  // el indicador no aparece en la entrada ni tapa la línea del pie
+  ahoraP.classList.toggle('oculto', intro.getBoundingClientRect().bottom > H * .35 ||pie.getBoundingClientRect().top < H - 8);
+  for (const s of secciones){
+    const r = s.getBoundingClientRect();
+    if (r.top < y1 && r.bottom > y0){
+      const f = s.dataset.formacion;
+      if (f !== activa){
+        activa = f;
+        ahora.classList.add('sale');
+        setTimeout(() => { ahora.textContent = s.dataset.nombre; ahora.classList.remove('sale'); }, 220);
+      }
+      return;
+    }
+  }
+  // al fondo de la página el pie puede no alcanzar el centro
+  const ultima = secciones[secciones.length - 1];
+  if (scrollY + H >= document.documentElement.scrollHeight - 4 && activa !== ultima.dataset.formacion){
+    activa = ultima.dataset.formacion; ahora.textContent = ultima.dataset.nombre;
+  }
+}
+
+/* ---------- el nombre: puntos tomados de las letras ---------- */
+let pts = new Float32Array(0), nPts = 0;
+function muestrearNombre(){
+  const lineas = phone() ? ['ONTO', 'TERRORIST'] : ['ONTOTERRORIST'];
+  const w = Math.max(10, Math.round(nombreEl.getBoundingClientRect().width));
+  const oc = document.createElement('canvas');
+  let o = oc.getContext('2d');
+  // el atajo font reinicia fontStretch: va siempre después
+  const fuente = fs => { o.font = `820 ${fs}px Archivo, sans-serif`; try { o.fontStretch = 'expanded'; } catch (e) {} };
+  fuente(100);
+  const ancho = Math.max(...lineas.map(l => o.measureText(l).width));
+  const fs = 100 * w / ancho * .99;
+  // la caja del título toma la altura justa de las letras
+  const h = Math.ceil(fs * .78 * lineas.length + fs * .08 * (lineas.length - 1) + fs * .04);
+  nombreEl.style.height = h + 'px';
+  oc.width = w; oc.height = h; o = oc.getContext('2d');
+  fuente(fs);
+  o.fillStyle = '#fff'; o.textBaseline = 'alphabetic';
+  const alto = fs * .78;
+  lineas.forEach((l, k) => o.fillText(l, 0, alto * (k + 1) + k * fs * .08));
+  const d = o.getImageData(0, 0, w, h).data;
+  let lleno = 0;
+  for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) if (d[(y * w + x) * 4 + 3] > 128) lleno++;
+  lleno *= 4;
+  const paso = Math.max(1.6, Math.sqrt(lleno / (N * 1.08)));
+  const lista = [];
+  for (let y = paso / 2; y < h; y += paso) for (let x = paso / 2; x < w; x += paso){
+    const xi = Math.round(x), yi = Math.round(y);
+    if (d[(yi * w + xi) * 4 + 3] > 128) lista.push(x, y);
+  }
+  // barajar de a pares
+  for (let i = lista.length / 2 - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [lista[2*i], lista[2*j]] = [lista[2*j], lista[2*i]];
+    [lista[2*i+1], lista[2*j+1]] = [lista[2*j+1], lista[2*i+1]];
+  }
+  nPts = Math.min(N, lista.length / 2);
+  pts = new Float32Array(lista.slice(0, nPts * 2));
+}
+
+/* ---------- halcones ---------- */
+const cursor = { x: -999, y: -999, on: 0, t: 0 };
+const fantasma = { x: 0, y: 0, vx: 0, vy: 0, vida: 0, prox: 5000 };
+addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  cursor.x = e.clientX; cursor.y = e.clientY; cursor.t = performance.now();
+}, { passive: true });
+document.addEventListener('pointerleave', () => { cursor.t = 0; });
+addEventListener('pointerdown', e => {
+  if (e.target.closest('a,button,input,label,output,summary,form')) return;
+  espantar(e.clientX, e.clientY);
+});
+function espantar(x, y){
+  for (let i = 0; i < N; i++){
+    const dx = px[i] - x, dy = py[i] - y, d = Math.hypot(dx, dy);
+    if (d < 260 && d > .01){
+      const k = 7 * (1 - d / 260);
+      vx[i] += dx / d * k; vy[i] += dy / d * k; boost[i] = 3.2;
+    }
+  }
+}
+
+/* ---------- filas de sitios: posarse y levantar vuelo ---------- */
+let filaHover = -1;
+const vistaImg = document.getElementById('vista-img'), vistaPie = document.getElementById('vista-pie');
+filas.forEach((f, k) => {
+  const on = () => {
+    filaHover = k;
+    filas.forEach(o => o.classList.toggle('on', o === f));
+    const src = f.dataset.img;
+    if (!vistaImg.src.endsWith(src)){
+      vistaImg.classList.add('cambia');
+      setTimeout(() => {
+        vistaImg.src = src;
+        const nom = f.querySelector('.nom').textContent;
+        vistaImg.alt = 'Pantalla de inicio de ' + nom;
+        vistaPie.textContent = nom + ', pantalla de inicio.';
+        vistaImg.classList.remove('cambia');
+      }, 180);
+    }
+  };
+  f.addEventListener('pointerenter', on);
+  f.addEventListener('focusin', on);
+  f.addEventListener('pointerleave', () => { if (filaHover === k) filaHover = -1; f.classList.remove('on'); });
+  f.addEventListener('focusout', () => { if (filaHover === k) filaHover = -1; f.classList.remove('on'); });
+});
+
+/* ---------- mandos ---------- */
+const fmt = (v, d) => v.toFixed(d).replace('.', ',');
+const R = { sep: 'r-sep', ali: 'r-ali', coh: 'r-coh', r: 'r-rad' };
+const O = { sep: 'o-sep', ali: 'o-ali', coh: 'o-coh', r: 'o-rad' };
+const leer = () => {
+  for (const k in R){
+    const v = parseFloat(document.getElementById(R[k]).value);
+    sliders[k] = v;
+    document.getElementById(O[k]).textContent = k === 'r' ? Math.round(v) + ' px' : fmt(v, 2);
+  }
+};
+const presets = [...document.querySelectorAll('.presets button')];
+for (const k in R) document.getElementById(R[k]).addEventListener('input', () => {
+  leer(); presets.forEach(b => b.setAttribute('aria-pressed', 'false')); if (reduce) asentar();
+});
+presets.forEach(b => b.addEventListener('click', () => {
+  const [s, a, c, r] = b.dataset.p.split(',').map(Number);
+  document.getElementById('r-sep').value = s; document.getElementById('r-ali').value = a;
+  document.getElementById('r-coh').value = c; document.getElementById('r-rad').value = r;
+  leer(); presets.forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  if (reduce) asentar();
+}));
+leer();
+const mOrden = document.getElementById('m-orden'), mVec = document.getElementById('m-vec');
+document.getElementById('m-aves').textContent = N.toLocaleString('es');
+
+/* ---------- la simulación ---------- */
+let head = new Int32Array(1), cols = 1, rows = 1, cell = 36, gx0 = 0, gy0 = 0;
+let orden = 0, ordenS = 0, vecProm = 0, t = 0;
+const rects = { piedras: [], vort: null, filas: [], nombre: null };
+
+function medir(){
+  rects.piedras.length = 0;
+  const pad = 16;
+  if (F.libre + F.molino + F.rio + F.reglas > .02){
+    for (const el of piedrasEl){
+      const r = el.getBoundingClientRect();
+      if (r.bottom > -40 && r.top < H + 40) rects.piedras.push(r.left - pad, r.top - pad, r.right + pad, r.bottom + pad);
+    }
+  }
+  if (F.molino > .01 && vortice.offsetParent){
+    const r = vortice.getBoundingClientRect();
+    rects.vort = [r.left + r.width / 2, r.top + r.height * .44, Math.min(r.width, r.height) * .36];
+  } else rects.vort = [W * .5, H * .5, Math.min(W, H) * .34];
+  rects.filas.length = 0;
+  if (F.cable > .01) for (const f of filas){
+    const r = f.getBoundingClientRect();
+    rects.filas.push(r.left, r.right, r.bottom);
+  }
+  if (F.nombre > .01){
+    const r = nombreEl.getBoundingClientRect();
+    rects.nombre = [r.left, r.top];
+  }
+}
+
+function paso(dt){
+  t += dt * 16.67;
+  // mezclar pesos de formación
+  const k = 1 - Math.exp(-dt * .03);
+  let suma = 0;
+  for (const f of KEYS){ F[f] += ((f === activa ? 1 : 0) - F[f]) * k; suma += F[f]; }
+  for (const p of ['sep', 'ali', 'coh', 'r', 'vmax', 'vmin']){
+    let v = 0; for (const f of KEYS) v += F[f] * SETS[f][p]; P[p] = v / suma;
+  }
+  medir();
+
+  // rejilla espacial
+  cell = Math.max(18, P.r);
+  gx0 = -W * .5; gy0 = -H * .5;
+  cols = Math.ceil(W * 2 / cell) + 1; rows = Math.ceil(H * 2 / cell) + 1;
+  if (head.length < cols * rows) head = new Int32Array(cols * rows);
+  head.fill(-1, 0, cols * rows);
+  for (let i = 0; i < N; i++){
+    let cx = ((px[i] - gx0) / cell) | 0, cy = ((py[i] - gy0) / cell) | 0;
+    cx = cx < 0 ? 0 : cx >= cols ? cols - 1 : cx;
+    cy = cy < 0 ? 0 : cy >= rows ? rows - 1 : cy;
+    const c = cy * cols + cx; nxt[i] = head[c]; head[c] = i;
+  }
+
+  const r2 = P.r * P.r, sr = P.r * .55, sr2 = sr * sr;
+  const vmax = P.vmax, MF = .07;
+  const libre = F.libre, molino = F.molino, cable = F.cable, rio = F.rio, nombre = F.nombre;
+  const bordes = libre + molino + F.reglas;
+  const piedraW = libre * .8 + molino + rio + F.reglas * .8;
+  const P_ = rects.piedras, nPi = P_.length;
+
+  // atractor errante de la murmuración
+  const ax0 = W * (.5 + .3 * Math.sin(t * .00031)), ay0 = H * (.36 + .16 * Math.sin(t * .00047 + 1));
+
+  // halcón fantasma: abre olas en la murmuración
+  if (libre > .6 && !reduce){
+    fantasma.prox -= dt * 16.67;
+    if (fantasma.prox < 0 && fantasma.vida <= 0){
+      const lado = Math.random() < .5 ? -1 : 1;
+      fantasma.x = lado < 0 ? -60 : W + 60; fantasma.y = ay0 + (Math.random() - .5) * H * .3;
+      const dx = ax0 - fantasma.x, dy = ay0 - fantasma.y, d = Math.hypot(dx, dy);
+      fantasma.vx = dx / d * 8.5; fantasma.vy = dy / d * 8.5; fantasma.vida = 2400;
+      fantasma.prox = 6000 + Math.random() * 5000;
+    }
+  }
+  if (fantasma.vida > 0){ fantasma.x += fantasma.vx * dt; fantasma.y += fantasma.vy * dt; fantasma.vida -= dt * 16.67; }
+  const halcones = [];
+  if (fantasma.vida > 0) halcones.push(fantasma.x, fantasma.y, 120);
+  cursor.on += (((performance.now() - cursor.t) < 1600 ? 1 : 0) - cursor.on) * .1;
+  if (cursor.on > .2) halcones.push(cursor.x, cursor.y, 135);
+
+  const porFila = Math.ceil(N / 10);
+  let sumUx = 0, sumUy = 0, vecTot = 0;
+
+  for (let i = 0; i < N; i++){
+    const x = px[i], y = py[i], vxi = vx[i], vyi = vy[i];
+    let fx = 0, fy = 0;
+
+    // vecinas
+    let aX = 0, aY = 0, cX = 0, cY = 0, sX = 0, sY = 0, n = 0;
+    let gcx = ((x - gx0) / cell) | 0, gcy = ((y - gy0) / cell) | 0;
+    buscar:
+    for (let oy = -1; oy <= 1; oy++){
+      const yy = gcy + oy; if (yy < 0 || yy >= rows) continue;
+      for (let ox = -1; ox <= 1; ox++){
+        const xx = gcx + ox; if (xx < 0 || xx >= cols) continue;
+        let j = head[yy * cols + xx];
+        while (j !== -1){
+          if (j !== i){
+            const dx = px[j] - x, dy = py[j] - y, d2 = dx * dx + dy * dy;
+            if (d2 < r2){
+              aX += vx[j]; aY += vy[j]; cX += dx; cY += dy; n++;
+              if (d2 < sr2){ const inv = 1 / (d2 + .5); sX -= dx * inv; sY -= dy * inv; }
+              if (n >= 16) break buscar;
+            }
+          }
+          j = nxt[j];
+        }
+      }
+    }
+    vecTot += n;
+    if (n){
+      let L = Math.hypot(aX, aY);
+      if (L > 1e-4 && P.ali > 0){
+        let sx = aX / L * vmax - vxi, sy = aY / L * vmax - vyi, m = Math.hypot(sx, sy);
+        if (m > MF){ sx *= MF / m; sy *= MF / m; } fx += sx * P.ali; fy += sy * P.ali;
+      }
+      L = Math.hypot(cX, cY);
+      if (L > 1e-4 && P.coh > 0){
+        let sx = cX / L * vmax - vxi, sy = cY / L * vmax - vyi, m = Math.hypot(sx, sy);
+        if (m > MF){ sx *= MF / m; sy *= MF / m; } fx += sx * P.coh; fy += sy * P.coh;
+      }
+      L = Math.hypot(sX, sY);
+      if (L > 1e-4 && P.sep > 0){
+        let sx = sX / L * vmax - vxi, sy = sY / L * vmax - vyi, m = Math.hypot(sx, sy);
+        if (m > MF * 1.3){ sx *= MF * 1.3 / m; sy *= MF * 1.3 / m; } fx += sx * P.sep; fy += sy * P.sep;
+      }
+    }
+
+    // bordes suaves
+    if (bordes > .01){
+      const mg = 70, kb = .14 * bordes;
+      if (x < mg) fx += (mg - x) / mg * kb; else if (x > W - mg) fx -= (x - W + mg) / mg * kb;
+      if (y < mg) fy += (mg - y) / mg * kb; else if (y > H - mg) fy -= (y - H + mg) / mg * kb;
+    }
+    if (rio > .01){
+      const mg = 50;
+      if (y < mg) fy += (mg - y) / mg * .14 * rio; else if (y > H - mg) fy -= (y - H + mg) / mg * .14 * rio;
+    }
+
+    // murmuración: un centro que pasea
+    if (libre > .01){
+      const dx = ax0 - x, dy = ay0 - y, d = Math.hypot(dx, dy) + 1e-3;
+      let sx = dx / d * vmax - vxi, sy = dy / d * vmax - vyi, m = Math.hypot(sx, sy);
+      if (m > .05){ sx *= .05 / m; sy *= .05 / m; }
+      fx += sx * .32 * libre; fy += sy * .32 * libre;
+    }
+
+    // molino: girar alrededor de un centro vacío
+    if (molino > .01){
+      const [mx, my, Rm] = rects.vort;
+      const dx = x - mx, dy = y - my, d = Math.hypot(dx, dy) + 1e-3;
+      const Rl = Rm * (1 + lane[i] * .38);
+      const tx = -dy / d, ty = dx / d, rad = (Rl - d) * .025;
+      let sx = tx * vmax + dx / d * rad - vxi, sy = ty * vmax + dy / d * rad - vyi, m = Math.hypot(sx, sy);
+      if (m > .12){ sx *= .12 / m; sy *= .12 / m; }
+      fx += sx * 1.3 * molino; fy += sy * 1.3 * molino;
+    }
+
+    // río: corriente hacia la derecha con meandros
+    if (rio > .01){
+      const ly = H * (.5 + lane[i] * .36) + Math.sin(x * .0042 + t * .0007 + lane[i] * 3) * H * .06;
+      let sx = vmax - vxi, sy = (ly - y) * .02 - vyi, m = Math.hypot(sx, sy);
+      if (m > .09){ sx *= .09 / m; sy *= .09 / m; }
+      fx += sx * 1.2 * rio; fy += sy * 1.2 * rio;
+    }
+
+    // llegar a un punto (cable o nombre)
+    let llegada = 0, tx = 0, ty = 0;
+    if (cable > .01 && rects.filas.length){
+      const fi = i % 10, slot = (i / 10) | 0;
+      const l = rects.filas[fi * 3], rr = rects.filas[fi * 3 + 1], b = rects.filas[fi * 3 + 2];
+      if (fi === filaHover){
+        const a = t * .0024 * (lane[i] > 0 ? 1 : -1) + slot * .37, rad = 46 + Math.abs(lane[i]) * 70;
+        tx = rr - 140 + Math.cos(a) * rad * 1.8; ty = b - 60 + Math.sin(a) * rad * .7;
+      } else {
+        tx = l + 6 + (slot + .5) / porFila * (rr - l - 12) + Math.sin(slot * 12.9898) * 1.5;
+        ty = b - 1;
+      }
+      llegada = cable;
+    }
+    if (nombre > .01 && nPts){
+      const k2 = i % nPts, extra = i >= nPts;
+      if (!extra){ tx = rects.nombre[0] + pts[k2 * 2]; ty = rects.nombre[1] + pts[k2 * 2 + 1]; }
+      else { const a = t * .002 + i; tx = W * .5 + Math.cos(a) * W * .3; ty = rects.nombre[1] - 80 + Math.sin(a * 1.3) * 40; }
+      // si conviven cable y nombre, gana el de más peso
+      if (nombre >= cable) llegada = nombre;
+    }
+    if (llegada > .01){
+      const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) + 1e-3;
+      const v = Math.min(5.5, d / 16);
+      let sx = dx / d * v - vxi, sy = dy / d * v - vyi, m = Math.hypot(sx, sy);
+      const lim = .1 + .35 * llegada;
+      if (m > lim){ sx *= lim / m; sy *= lim / m; }
+      fx += sx * 1.4 * llegada; fy += sy * 1.4 * llegada;
+      if (d < 4 && llegada > .6 && boost[i] < .2){ vx[i] *= .6; vy[i] *= .6; }
+    }
+
+    // piedras: el texto desvía a la bandada
+    if (piedraW > .02){
+      for (let q = 0; q < nPi; q += 4){
+        const l = P_[q], tp = P_[q + 1], rr = P_[q + 2], b = P_[q + 3];
+        if (x > l && x < rr && y > tp && y < b){
+          const dl = x - l, dr = rr - x, dt_ = y - tp, db = b - y;
+          const mn = Math.min(dl, dr, dt_, db), k3 = .55 * piedraW * (1 + mn / 40);
+          if (mn === dl) fx -= k3; else if (mn === dr) fx += k3; else if (mn === dt_) fy -= k3; else fy += k3;
+          break;
+        }
+      }
+    }
+
+    // halcones
+    for (let q = 0; q < halcones.length; q += 3){
+      const dx = x - halcones[q], dy = y - halcones[q + 1], d = Math.hypot(dx, dy), rh = halcones[q + 2];
+      if (d < rh && d > .01){ const k4 = 1.1 * (1 - d / rh); fx += dx / d * k4; fy += dy / d * k4; boost[i] = Math.max(boost[i], 2.4); }
+    }
+
+    let nvx = vxi + fx * dt, nvy = vyi + fy * dt;
+    const sp = Math.hypot(nvx, nvy);
+    const top = vmax + boost[i], bot = P.vmin;
+    if (sp > top){ nvx *= top / sp; nvy *= top / sp; }
+    else if (sp < bot && sp > 1e-4){ nvx *= bot / sp; nvy *= bot / sp; }
+    vx[i] = nvx; vy[i] = nvy;
+    boost[i] *= .97;
+    px[i] += nvx * dt; py[i] += nvy * dt;
+    if (rio > .5){ if (px[i] > W + 30) px[i] = -30; }
+
+    const s2 = Math.hypot(nvx, nvy);
+    if (s2 > .35){ hd[i] = Math.atan2(nvy, nvx); sumUx += nvx / s2; sumUy += nvy / s2; }
+  }
+  orden = Math.hypot(sumUx, sumUy) / N;
+  vecProm = vecTot / N;
+}
+
+/* ---------- dibujo ---------- */
+const INK = '236,235,230';
+function dibujar(estela){
+  if (estela){ ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.fillRect(0, 0, W, H); }
+  else { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); }
+  const esc = phone() ? .85 : 1;
+  // pase 0: lejanas en vuelo; 1: cercanas en vuelo; 2: posadas, todas con tinta plena
+  for (let pase = 0; pase < 3; pase++){
+    ctx.beginPath();
+    for (let i = 0; i < N; i++){
+      const x = px[i], y = py[i];
+      if (x < -10 || x > W + 10 || y < -10 || y > H + 10) continue;
+      const s = sz[i] * esc;
+      const posada = Math.hypot(vx[i], vy[i]) < .45;
+      if (pase === 2){
+        if (posada){ const a = 1.6 + s * 1.4; ctx.moveTo(x, y - a); ctx.lineTo(x, y + a * .25); }
+        continue;
+      }
+      if (posada || (pase === 0) !== (sz[i] < .95)) continue;
+      const c = Math.cos(hd[i]), si = Math.sin(hd[i]);
+      const aleteo = Math.sin(ph[i] + t * (.011 + .006 * s));
+      const env = 2.6 * s * (.55 + .45 * aleteo), atras = 2.2 * s;
+      const hx = x + c * 1.8 * s, hy = y + si * 1.8 * s;
+      const bx = x - c * atras, by = y - si * atras;
+      ctx.moveTo(bx - si * env, by + c * env);
+      ctx.lineTo(hx, hy);
+      ctx.lineTo(bx + si * env, by - c * env);
+    }
+    ctx.strokeStyle = pase === 0 ? `rgba(${INK},.48)` : pase === 1 ? `rgba(${INK},.92)` : `rgb(${INK})`;
+    ctx.lineWidth = pase === 0 ? 1 : pase === 1 ? 1.35 : 1.7;
+    ctx.stroke();
+  }
+  // halcones en rojo
+  const hawk = (x, y, ang, s, a) => {
+    const c = Math.cos(ang), si = Math.sin(ang), al = Math.sin(t * .02);
+    const env = 9 * s * (.6 + .4 * al), atras = 7 * s;
+    const hx = x + c * 6 * s, hy = y + si * 6 * s, bx = x - c * atras, by = y - si * atras;
+    ctx.beginPath();
+    ctx.moveTo(bx - si * env, by + c * env); ctx.lineTo(hx, hy); ctx.lineTo(bx + si * env, by - c * env);
+    ctx.strokeStyle = `rgba(255,61,46,${a})`; ctx.lineWidth = 2; ctx.stroke();
+  };
+  if (fantasma.vida > 0) hawk(fantasma.x, fantasma.y, Math.atan2(fantasma.vy, fantasma.vx), 1, 1);
+  if (cursor.on > .05){
+    cursor.px = cursor.px ?? cursor.x; cursor.py = cursor.py ?? cursor.y;
+    const dx = cursor.x - cursor.px, dy = cursor.y - cursor.py;
+    if (Math.hypot(dx, dy) > .5) cursor.ang = Math.atan2(dy, dx);
+    cursor.px += dx * .25; cursor.py += dy * .25;
+    hawk(cursor.px - Math.cos(cursor.ang || 0) * 22, cursor.py - Math.sin(cursor.ang || 0) * 22, cursor.ang || 0, .8, cursor.on * .9);
+  }
+}
+
+/* ---------- lecturas: título y mediciones ---------- */
+let cuadro = 0;
+function lecturas(){
+  ordenS += (orden - ordenS) * .04;
+  if (++cuadro % 12 === 0){
+    mOrden.textContent = fmt(ordenS, 2);
+    mVec.textContent = fmt(vecProm, 1);
+  }
+}
+
+/* ---------- movimiento reducido: una foto fija por formación ---------- */
+function asentar(){
+  elegirFormacion();
+  for (const f of KEYS) F[f] = f === activa ? 1 : 0;
+  medir();
+  if (activa === 'cable' || activa === 'nombre'){
+    for (let i = 0; i < 4; i++) paso(1);
+    for (let i = 0; i < N; i++){
+      let tx, ty;
+      if (activa === 'cable'){
+        const fi = i % 10, slot = (i / 10) | 0, porFila = Math.ceil(N / 10);
+        const l = rects.filas[fi * 3], rr = rects.filas[fi * 3 + 1], b = rects.filas[fi * 3 + 2];
+        tx = l + 6 + (slot + .5) / porFila * (rr - l - 12); ty = b - 1;
+      } else if (i < nPts){ tx = rects.nombre[0] + pts[i * 2]; ty = rects.nombre[1] + pts[i * 2 + 1]; }
+      else { tx = Math.random() * W; ty = rects.nombre[1] - 60 - Math.random() * 120; }
+      px[i] = tx; py[i] = ty; vx[i] = 0; vy[i] = 0;
+    }
+  } else {
+    for (let i = 0; i < 70; i++) paso(1.5);
+  }
+  dibujar(false);
+}
+
+/* ---------- arranque ---------- */
+let ultimo = performance.now();
+function bucle(ahoraT){
+  const dt = Math.min(2.2, (ahoraT - ultimo) / 16.67); ultimo = ahoraT;
+  elegirFormacion();
+  paso(dt);
+  dibujar(true);
+  lecturas();
+  requestAnimationFrame(bucle);
+}
+
+let rz;
+addEventListener('resize', () => {
+  clearTimeout(rz);
+  rz = setTimeout(() => { resize(); muestrearNombre(); if (reduce) asentar(); }, 150);
+});
+
+const listo = document.fonts ? document.fonts.load("820 100px Archivo") : Promise.resolve();
+Promise.race([listo, new Promise(r => setTimeout(r, 2500))]).then(() => {
+  muestrearNombre();
+  if (reduce){
+    asentar();
+    let sc; addEventListener('scroll', () => { clearTimeout(sc); sc = setTimeout(asentar, 120); }, { passive: true });
+  } else requestAnimationFrame(t0 => { ultimo = t0; requestAnimationFrame(bucle); });
+});
+
+/* ---------- la entrada: solo el nombre; un clic abre la página ---------- */
+const raiz = document.documentElement;
+if (!location.hash){
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  scrollTo(0, 0);
+  raiz.classList.add('cerrado');
+}
+function entrar(teclado){
+  raiz.classList.remove('cerrado');
+  if (teclado) espantar(W / 2, intro.getBoundingClientRect().top + intro.offsetHeight / 2);
+  // un instante para ver cómo se deshacen las letras, y abajo
+  setTimeout(() => {
+    document.getElementById('presentacion').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    document.getElementById('h-pres').focus({ preventScroll: true });
+  }, reduce ? 0 : 320);
+}
+intro.addEventListener('click', e => { if (e.target.id !== 'entrar') entrar(false); });
+document.getElementById('entrar').addEventListener('click', () => entrar(true));
+addEventListener('keydown', e => {
+  if (!raiz.classList.contains('cerrado')) return;
+  if (['Enter', ' ', 'ArrowDown', 'PageDown', 'End'].includes(e.key)){ e.preventDefault(); entrar(true); }
+});
+
+/* ---------- entradas por apartado ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+}), { rootMargin: '0px 0px -8% 0px', threshold: .1 });
+document.querySelectorAll('[data-rev]').forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
