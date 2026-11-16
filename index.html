@@ -185,9 +185,9 @@ html.cerrado,html.cerrado body{overflow:hidden}
   </section>
 
   <section class="portada" id="presentacion" data-formacion="libre" data-nombre="murmuración" aria-labelledby="h-pres">
-<header class="barra" data-piedra>
+<header class="barra">
   <a class="marca" href="#arriba">ontoterrorist</a>
-  <nav aria-label="Apartados">
+  <nav aria-label="Apartados" data-piedra>
     <a href="#intereses">Intereses</a>
     <a href="#reglas">Las reglas</a>
     <a href="#sitios">Sitios</a>
@@ -197,10 +197,10 @@ html.cerrado,html.cerrado body{overflow:hidden}
 </header>
     <div class="bajada" data-piedra>
       <h2 id="h-pres" tabindex="-1" data-rev>Mente, lógica y diez juegos</h2>
-      <p data-rev style="--i:1">Filosofía de la mente y de la lógica, y diez juegos para pensar con las manos. Mil aves sin jefe ordenan esta página.</p>
+      <p data-rev style="--i:1">Filosofía de la mente y de la lógica, y diez juegos para pensar con las manos. Miles de aves sin jefe ordenan esta página.</p>
       <div class="acciones" data-rev style="--i:2">
         <a class="boton" href="#sitios">Ver los diez sitios</a>
-        <span class="nota">Tu cursor es un halcón. Haz clic para espantarlas.</span>
+        <span class="nota">Haz clic donde quieras para espantarlas.</span>
       </div>
     </div>
   </section>
@@ -319,7 +319,7 @@ html.cerrado,html.cerrado body{overflow:hidden}
       </div>
       <div class="p" data-piedra>
         <dt data-rev>¿Qué es el ave roja?</dt>
-        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu cursor también es uno.</dd>
+        <dd data-rev style="--i:1">Un halcón. En la presentación y al final de la página atraviesa la bandada de vez en cuando y abre una ola, como hacen los halcones con los estorninos. Tu clic hace lo mismo.</dd>
       </div>
       <div class="p" data-piedra>
         <dt data-rev>¿Y si pido menos movimiento?</dt>
@@ -360,7 +360,7 @@ const phone = () => innerWidth <= 700;
 
 let W = 0, H = 0, DPR = 1;
 const area = innerWidth * innerHeight;
-const N = phone() ? 700 : area > 1.5e6 ? 1500 : 1150;
+const N = phone() ? 1700 : area > 1.5e6 ? 3600 : 2800;
 
 const px = new Float32Array(N), py = new Float32Array(N);
 const vx = new Float32Array(N), vy = new Float32Array(N);
@@ -380,8 +380,8 @@ function resize(){
 resize();
 
 for (let i = 0; i < N; i++){
-  px[i] = W * (.15 + Math.random() * .7);
-  py[i] = H * (.1 + Math.random() * .5);
+  px[i] = Math.random() * W;
+  py[i] = Math.random() * H;
   const a = Math.random() * Math.PI * 2;
   vx[i] = Math.cos(a) * 2; vy[i] = Math.sin(a) * 2; hd[i] = a;
   sz[i] = .62 + Math.pow(Math.random(), 1.6) * .8;
@@ -397,12 +397,14 @@ const SETS = {
   reglas: sliders,
   cable:  { sep: .2,  ali: .15, coh: 0,   r: 22, vmax: 4.4, vmin: 0 },
   rio:    { sep: 1.5, ali: 2.1, coh: .45, r: 34, vmax: 3.6, vmin: 2.2 },
-  nombre: { sep: .15, ali: .1,  coh: 0,   r: 18, vmax: 5,   vmin: 0 },
+  nombre: { sep: .15, ali: .1,  coh: 0,   r: 14, vmax: 12,  vmin: 0 },
 };
 const KEYS = Object.keys(SETS);
-const F = { libre: 1, molino: 0, reglas: 0, cable: 0, rio: 0, nombre: 0 };
-const P = Object.assign({}, SETS.libre);
-let activa = 'libre';
+// sin ancla en la dirección se entra por el nombre: las aves salen ya rumbo a las letras
+const deEntrada = !location.hash;
+const F = { libre: deEntrada ? 0 : 1, molino: 0, reglas: 0, cable: 0, rio: 0, nombre: deEntrada ? 1 : 0 };
+const P = Object.assign({}, deEntrada ? SETS.nombre : SETS.libre);
+let activa = deEntrada ? 'nombre' : 'libre';
 
 const secciones = [...document.querySelectorAll('[data-formacion]')];
 const piedrasEl = [...document.querySelectorAll('[data-piedra]')];
@@ -477,13 +479,7 @@ function muestrearNombre(){
 }
 
 /* ---------- halcones ---------- */
-const cursor = { x: -999, y: -999, on: 0, t: 0 };
 const fantasma = { x: 0, y: 0, vx: 0, vy: 0, vida: 0, prox: 5000 };
-addEventListener('pointermove', e => {
-  if (e.pointerType !== 'mouse') return;
-  cursor.x = e.clientX; cursor.y = e.clientY; cursor.t = performance.now();
-}, { passive: true });
-document.addEventListener('pointerleave', () => { cursor.t = 0; });
 addEventListener('pointerdown', e => {
   if (e.target.closest('a,button,input,label,output,summary,form')) return;
   espantar(e.clientX, e.clientY);
@@ -626,8 +622,6 @@ function paso(dt){
   if (fantasma.vida > 0){ fantasma.x += fantasma.vx * dt; fantasma.y += fantasma.vy * dt; fantasma.vida -= dt * 16.67; }
   const halcones = [];
   if (fantasma.vida > 0) halcones.push(fantasma.x, fantasma.y, 120);
-  cursor.on += (((performance.now() - cursor.t) < 1600 ? 1 : 0) - cursor.on) * .1;
-  if (cursor.on > .2) halcones.push(cursor.x, cursor.y, 135);
 
   const porFila = Math.ceil(N / 10);
   let sumUx = 0, sumUy = 0, vecTot = 0;
@@ -738,9 +732,9 @@ function paso(dt){
     }
     if (llegada > .01){
       const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) + 1e-3;
-      const v = Math.min(5.5, d / 16);
+      const v = Math.min(12, d / 8);
       let sx = dx / d * v - vxi, sy = dy / d * v - vyi, m = Math.hypot(sx, sy);
-      const lim = .1 + .35 * llegada;
+      const lim = .1 + .9 * llegada;
       if (m > lim){ sx *= lim / m; sy *= lim / m; }
       fx += sx * 1.4 * llegada; fy += sy * 1.4 * llegada;
       if (d < 4 && llegada > .6 && boost[i] < .2){ vx[i] *= .6; vy[i] *= .6; }
@@ -824,13 +818,6 @@ function dibujar(estela){
     ctx.strokeStyle = `rgba(255,61,46,${a})`; ctx.lineWidth = 2; ctx.stroke();
   };
   if (fantasma.vida > 0) hawk(fantasma.x, fantasma.y, Math.atan2(fantasma.vy, fantasma.vx), 1, 1);
-  if (cursor.on > .05){
-    cursor.px = cursor.px ?? cursor.x; cursor.py = cursor.py ?? cursor.y;
-    const dx = cursor.x - cursor.px, dy = cursor.y - cursor.py;
-    if (Math.hypot(dx, dy) > .5) cursor.ang = Math.atan2(dy, dx);
-    cursor.px += dx * .25; cursor.py += dy * .25;
-    hawk(cursor.px - Math.cos(cursor.ang || 0) * 22, cursor.py - Math.sin(cursor.ang || 0) * 22, cursor.ang || 0, .8, cursor.on * .9);
-  }
 }
 
 /* ---------- lecturas: título y mediciones ---------- */
@@ -883,14 +870,15 @@ addEventListener('resize', () => {
   rz = setTimeout(() => { resize(); muestrearNombre(); if (reduce) asentar(); }, 150);
 });
 
-const listo = document.fonts ? document.fonts.load("820 100px Archivo") : Promise.resolve();
-Promise.race([listo, new Promise(r => setTimeout(r, 2500))]).then(() => {
-  muestrearNombre();
-  if (reduce){
-    asentar();
-    let sc; addEventListener('scroll', () => { clearTimeout(sc); sc = setTimeout(asentar, 120); }, { passive: true });
-  } else requestAnimationFrame(t0 => { ultimo = t0; requestAnimationFrame(bucle); });
-});
+// arranca ya, con la letra que haya; cuando llega Archivo se recalculan las letras
+muestrearNombre();
+if (reduce){
+  asentar();
+  let sc; addEventListener('scroll', () => { clearTimeout(sc); sc = setTimeout(asentar, 120); }, { passive: true });
+} else requestAnimationFrame(t0 => { ultimo = t0; requestAnimationFrame(bucle); });
+if (document.fonts && !document.fonts.check("820 100px Archivo")){
+  document.fonts.load("820 100px Archivo").then(() => { muestrearNombre(); if (reduce) asentar(); });
+}
 
 /* ---------- la entrada: solo el nombre; un clic abre la página ---------- */
 const raiz = document.documentElement;
