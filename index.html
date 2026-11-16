@@ -77,30 +77,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
 .tema{display:flex;flex-direction:column;gap:14px;max-width:56ch}
 .vortice{grid-column:8/-1;grid-row:1;position:sticky;top:12vh;height:76vh;align-self:start;display:flex;align-items:flex-end}
 
-/* ---------- reglas: a mano ---------- */
-.reglas{padding-top:var(--gap)}
-.reglas .texto{grid-column:1/span 5;display:flex;flex-direction:column;gap:26px;align-self:start}
-.reglas .texto p{max-width:46ch}
-.mando{grid-column:7/-1;background:var(--surface);padding:clamp(24px,3vw,44px);display:flex;flex-direction:column;gap:30px}
-.regla{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline}
-.regla label{font:600 var(--lead)/1.1 var(--f);font-variation-settings:'wdth' 106;letter-spacing:-.015em}
-.regla output{font:500 var(--lead)/1 var(--f);font-variant-numeric:tabular-nums;color:var(--accent)}
-.regla p{grid-column:1/-1;font-size:var(--small);color:var(--muted);line-height:1.45;max-width:52ch}
-.regla input{grid-column:1/-1;width:100%;margin:8px 0 0;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:pointer}
-.regla input::-webkit-slider-runnable-track{height:6px;background:var(--surface-2)}
-.regla input::-moz-range-track{height:6px;background:var(--surface-2)}
-.regla input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-8px;background:var(--ink);border-radius:50%;transition:transform .2s var(--ease)}
-.regla input::-moz-range-thumb{width:22px;height:22px;border:0;background:var(--ink);border-radius:50%}
-.regla input:hover::-webkit-slider-thumb{transform:scale(1.15)}
-.regla input:focus-visible{outline-offset:2px}
-.presets{display:flex;flex-wrap:wrap;gap:10px}
-.presets button{font:500 var(--small)/1 var(--f);color:var(--ink);background:var(--surface-2);border:0;padding:13px 16px;cursor:pointer;border-radius:0;transition:background-color .2s,color .2s,transform .2s var(--ease)}
-.presets button:hover{background:#34342f;transform:translateY(-1px)}
-.presets button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
-.medidas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding-top:6px}
-.medidas div{display:flex;flex-direction:column;gap:4px}
-.medidas b{font:700 clamp(1.75rem,1.2rem + 1.6vw,2.75rem)/1 var(--f);font-variation-settings:'wdth' 112;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
-.medidas span{font-size:var(--small);color:var(--muted);line-height:1.35}
 
 /* ---------- sitios: en el cable ---------- */
 .sitios{padding-top:var(--gap)}
@@ -143,8 +119,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
 @media (max-width:1000px){
   .intereses .izq{grid-column:1/span 7}
   .vortice{grid-column:8/-1}
-  .reglas .texto{grid-column:1/-1;margin-bottom:48px}
-  .mando{grid-column:1/-1}
   .sitios .cab,.lista{grid-column:1/span 7}
   .vista{grid-column:8/-1}
   .preguntas .cab{grid-column:1/span 5}
@@ -160,7 +134,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
   .sitio{grid-template-columns:1fr;gap:14px}
   .sitio img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--surface);order:-1}
   .preguntas .cab{position:static;margin-bottom:48px}
-  .medidas{grid-template-columns:1fr 1fr 1fr}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -184,7 +157,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
   <a class="marca" href="#arriba">ontoterrorist</a>
   <nav aria-label="Apartados" data-piedra>
     <a href="#intereses">Intereses</a>
-    <a href="#reglas">Las reglas</a>
     <a href="#sitios">Sitios</a>
     <a href="#preguntas">Preguntas</a>
     <a class="gh" href="https://github.com/ontoterrorist">GitHub</a>
@@ -226,46 +198,6 @@ html.cerrado,html.cerrado body{overflow:hidden}
     <div class="vortice" aria-hidden="true"></div>
   </section>
 
-  <section class="reglas g" id="reglas" data-formacion="reglas" data-nombre="a mano" aria-labelledby="h-reg">
-    <div class="texto" data-piedra>
-      <h2 id="h-reg" data-rev>Tres reglas, ningún jefe</h2>
-      <p class="lead" data-rev style="--i:1">Cada ave ve solo a sus vecinas, dentro de un radio, y corrige su rumbo con tres reglas. Ninguna ve la bandada entera.</p>
-      <p data-rev style="--i:2">Craig Reynolds las publicó en 1987 con el nombre de boids. Son mi ejemplo favorito de explicación mecanicista: unas partes, lo que hace cada una y cómo se organizan, y de ahí sale una forma que ninguna parte contiene. Mueve las reglas y mira qué bandada sale.</p>
-    </div>
-    <form class="mando" data-piedra aria-label="Reglas de la bandada" onsubmit="return false">
-      <div class="regla" data-rev>
-        <label for="r-sep">Separación</label><output id="o-sep" for="r-sep">1,70</output>
-        <p>No chocar: cada ave se aleja de las que tiene demasiado cerca.</p>
-        <input id="r-sep" type="range" min="0" max="3" step="0.05" value="1.7">
-      </div>
-      <div class="regla" data-rev style="--i:1">
-        <label for="r-ali">Alineación</label><output id="o-ali" for="r-ali">1,00</output>
-        <p>Ir hacia donde van: copia el rumbo medio de sus vecinas.</p>
-        <input id="r-ali" type="range" min="0" max="3" step="0.05" value="1">
-      </div>
-      <div class="regla" data-rev style="--i:2">
-        <label for="r-coh">Cohesión</label><output id="o-coh" for="r-coh">0,85</output>
-        <p>No quedarse sola: se acerca al centro de sus vecinas.</p>
-        <input id="r-coh" type="range" min="0" max="3" step="0.05" value="0.85">
-      </div>
-      <div class="regla" data-rev style="--i:3">
-        <label for="r-rad">Radio de visión</label><output id="o-rad" for="r-rad">36 px</output>
-        <p>Hasta dónde mira cada ave. Más allá, las demás no existen para ella.</p>
-        <input id="r-rad" type="range" min="10" max="80" step="1" value="36">
-      </div>
-      <div class="presets" role="group" aria-label="Bandadas de ejemplo" data-rev style="--i:4">
-        <button type="button" data-p="1.7,1,0.85,36" aria-pressed="true">Murmuración</button>
-        <button type="button" data-p="1.2,0,1.6,42" aria-pressed="false">Enjambre</button>
-        <button type="button" data-p="1.4,2.6,0.5,40" aria-pressed="false">Cardumen</button>
-        <button type="button" data-p="2.8,0.15,0,30" aria-pressed="false">Dispersión</button>
-      </div>
-      <div class="medidas" aria-live="off" data-rev style="--i:5">
-        <div><b id="m-orden">0,00</b><span>orden: 1 si todas van hacia el mismo lado</span></div>
-        <div><b id="m-vec">0,0</b><span>vecinas que ve cada ave, en promedio</span></div>
-        <div><b id="m-aves">0</b><span>aves, ninguna al mando</span></div>
-      </div>
-    </form>
-  </section>
 
   <section class="sitios g" id="sitios" data-formacion="cable" data-nombre="en el cable" aria-labelledby="h-sit">
     <div class="cab">
@@ -390,7 +322,7 @@ const sliders = { sep: 1.7, ali: 1, coh: .85, r: 36, vmax: 3.2, vmin: 1.4 };
 const SETS = {
   libre:  { sep: 1.7, ali: 1.0, coh: .85, r: 36, vmax: 3.3, vmin: 1.6 },
   molino: { sep: 1.6, ali: 1.5, coh: .4,  r: 30, vmax: 2.9, vmin: 1.6 },
-  reglas: sliders,
+  reglas: sliders,  // sin mandos: valores fijos de murmuración
   cable:  { sep: .2,  ali: .15, coh: 0,   r: 22, vmax: 4.4, vmin: 0 },
   rio:    { sep: 1.5, ali: 2.1, coh: .45, r: 34, vmax: 3.6, vmin: 2.2 },
   nombre: { sep: .15, ali: .1,  coh: 0,   r: 14, vmax: 12,  vmin: 0 },
@@ -506,32 +438,6 @@ filas.forEach((f, k) => {
   f.addEventListener('pointerleave', () => { if (filaHover === k) filaHover = -1; f.classList.remove('on'); });
   f.addEventListener('focusout', () => { if (filaHover === k) filaHover = -1; f.classList.remove('on'); });
 });
-
-/* ---------- mandos ---------- */
-const fmt = (v, d) => v.toFixed(d).replace('.', ',');
-const R = { sep: 'r-sep', ali: 'r-ali', coh: 'r-coh', r: 'r-rad' };
-const O = { sep: 'o-sep', ali: 'o-ali', coh: 'o-coh', r: 'o-rad' };
-const leer = () => {
-  for (const k in R){
-    const v = parseFloat(document.getElementById(R[k]).value);
-    sliders[k] = v;
-    document.getElementById(O[k]).textContent = k === 'r' ? Math.round(v) + ' px' : fmt(v, 2);
-  }
-};
-const presets = [...document.querySelectorAll('.presets button')];
-for (const k in R) document.getElementById(R[k]).addEventListener('input', () => {
-  leer(); presets.forEach(b => b.setAttribute('aria-pressed', 'false')); if (reduce) asentar();
-});
-presets.forEach(b => b.addEventListener('click', () => {
-  const [s, a, c, r] = b.dataset.p.split(',').map(Number);
-  document.getElementById('r-sep').value = s; document.getElementById('r-ali').value = a;
-  document.getElementById('r-coh').value = c; document.getElementById('r-rad').value = r;
-  leer(); presets.forEach(o => o.setAttribute('aria-pressed', String(o === b)));
-  if (reduce) asentar();
-}));
-leer();
-const mOrden = document.getElementById('m-orden'), mVec = document.getElementById('m-vec');
-document.getElementById('m-aves').textContent = N.toLocaleString('es');
 
 /* ---------- la simulación ---------- */
 let head = new Int32Array(1), cols = 1, rows = 1, cell = 36, gx0 = 0, gy0 = 0;
@@ -824,16 +730,6 @@ function dibujar(estela){
   if (fantasma.vida > 0) hawk(fantasma.x, fantasma.y, Math.atan2(fantasma.vy, fantasma.vx), 1, 1);
 }
 
-/* ---------- lecturas: título y mediciones ---------- */
-let cuadro = 0;
-function lecturas(){
-  ordenS += (orden - ordenS) * .04;
-  if (++cuadro % 12 === 0){
-    mOrden.textContent = fmt(ordenS, 2);
-    mVec.textContent = fmt(vecProm, 1);
-  }
-}
-
 /* ---------- movimiento reducido: una foto fija por formación ---------- */
 function asentar(){
   elegirFormacion();
@@ -864,7 +760,6 @@ function bucle(ahoraT){
   elegirFormacion();
   paso(dt);
   dibujar(true);
-  lecturas();
   requestAnimationFrame(bucle);
 }
 
